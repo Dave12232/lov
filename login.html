@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Birthday Surprise</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #000000, #1a0000);
+            font-family: 'Arial', sans-serif;
+            color: white;
+            animation: gradientBG 10s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            width: 300px;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        input {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+        }
+
+        button {
+            padding: 0.8rem;
+            border: none;
+            border-radius: 10px;
+            background: #ff0000;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        button:hover {
+            animation: heartbeat 1s infinite;
+            background: #ff0000;
+            transform: none;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 0, 0, 0.3);
+            animation: floatUp 15s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .success-message {
+            font-size: 2rem;
+            color: #ff0000;
+            animation: scale 0.5s ease-in-out;
+        }
+
+        @keyframes scale {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            background: radial-gradient(circle, #fff 10%, transparent 70%);
+            animation: sparkle 1s linear forwards;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1) rotate(180deg); opacity: 0; }
+        }
+
+        .love-meter {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: -10px;
+            overflow: hidden;
+        }
+
+        .love-meter-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ff69b4);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <form class="login-form" onsubmit="return checkPassword(event)">
+            <h2>❤️ Enter Password ❤️</h2>
+            <input type="password" id="password" placeholder="Password" required>
+            <div class="love-meter">
+                <div class="love-meter-fill"></div>
+            </div>
+            <button type="submit">Unlock Surprise</button>
+        </form>
+    </div>
+
+    <div class="floating-hearts"></div>
+
+    <div class="success-overlay">
+        <div class="success-message">❤️ Loading Your Surprise... ❤️</div>
+    </div>
+
+    <script>
+        function checkPassword(event) {
+            event.preventDefault();
+            const form = document.querySelector('.login-form');
+            const password = document.getElementById('password').value;
+            if (password === "love David") {
+                const overlay = document.querySelector('.success-overlay');
+                overlay.style.display = 'flex';
+                sessionStorage.setItem('authenticated', 'true');
+                setTimeout(() => {
+                    window.location.href = "GFB.html";
+                }, 2000);
+            } else {
+                form.classList.add('shake');
+                setTimeout(() => form.classList.remove('shake'), 500);
+                alert("Incorrect password ❤️");
+            }
+            return false;
+        }
+
+        function createHearts() {
+            const container = document.querySelector('.floating-hearts');
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 5 + 10) + 's';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 15000);
+            }, 300);
+        }
+        createHearts();
+
+        document.getElementById('password').addEventListener('focus', function(e) {
+            const createSparkle = setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = (e.target.offsetLeft + Math.random() * e.target.offsetWidth) + 'px';
+                sparkle.style.top = (e.target.offsetTop + Math.random() * e.target.offsetHeight) + 'px';
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 1000);
+            }, 100);
+
+            this.addEventListener('blur', () => clearInterval(createSparkle));
+        });
+
+        function typePlaceholder() {
+            const input = document.getElementById('password');
+            const text = "Enter the magic words...";
+            let i = 0;
+            
+            input.placeholder = "";
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    input.placeholder += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                    setTimeout(() => {
+                        input.placeholder = "";
+                        i = 0;
+                        typePlaceholder();
+                    }, 2000);
+                }
+            }, 100);
+        }
+        typePlaceholder();
+
+        document.getElementById('password').addEventListener('input', function(e) {
+            const fill = document.querySelector('.love-meter-fill');
+            const percentage = (e.target.value.length / 10) * 100;
+            fill.style.width = Math.min(percentage, 100) + '%';
+        });
+    </script>
+</body>
+</html>
